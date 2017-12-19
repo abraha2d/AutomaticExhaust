@@ -57,6 +57,7 @@ void setup() {
   Serial.println();
 #endif
 
+  // Enable the watchdog with a 2 second timeout
   wdt_enable(WDTO_2S);
 
   for (int i = 0; i < 4; i++) {
@@ -74,6 +75,7 @@ void loop() {
 
   unsigned int distance = sonar.convert_in(sonar.ping_median(NUM_READINGS));
 
+  // Light internal LED based on current sonar distance
   if (distance == 0) {
   } else if (distance > THRESHOLD) {
     digitalWrite(LED_BUILTIN, LOW);
@@ -87,12 +89,15 @@ void loop() {
   Serial.print("in -> ");
 #endif
 
+  // If distance is 0, it's most likely a faulty measurement
   if (distance == 0) {
 
 #if DEBUG
     Serial.print("Ignoring...");
 #endif
 
+  // If distance does not match current state (i.e. distance measurement just
+  // crossed threshold), commence waiting
   } else if ((!on && distance > THRESHOLD) || (on && distance < THRESHOLD)) {
     onTime = offTime = millis();
 
@@ -101,6 +106,8 @@ void loop() {
     Serial.print(on ? "On" : "Off");
 #endif
 
+  // If distance is less than threshold, and we've waited more than DELAY_ON,
+  // turn on the relay
   } else if (!on && distance < THRESHOLD && millis() - onTime > DELAY_ON) {
     on = true;
 
@@ -112,6 +119,8 @@ void loop() {
     Serial.print("ms remaining");
 #endif
 
+  // If distance is greater than the threshold, and we've waited more than
+  // DELAY_OFF, turn off the relay
   } else if (on && distance > THRESHOLD && millis() - offTime > DELAY_OFF) {
     on = false;
 
@@ -135,6 +144,7 @@ void loop() {
 
   ////////////////////////////////////////////////////////////////////////////////
 
+// If sensor 2 is enabled, repeat all the stuff above, for sensor 2
 #if SENSOR2
 
   wdt_reset();
