@@ -24,7 +24,7 @@
 #define DELAY_REFRESH 250 // Delay between sensor scans (in milliseconds, min 29)
 #define NUM_READINGS  5   // Number of readings to average per scan
 
-bool on = !RELAY_ON;      // Current state of exhaust (start with off)
+bool on = 0;              // Current state of exhaust (start with off)
 unsigned long onTime;     // On delay start time
 unsigned long offTime;    // Off delay start time
 NewPing sonar(PIN_TRIGGER, PIN_ECHO);
