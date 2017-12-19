@@ -30,7 +30,7 @@ unsigned long offTime;    // Off delay start time
 NewPing sonar(PIN_TRIGGER, PIN_ECHO);
 
 #if SENSOR2
-bool on2 = !RELAY_ON;
+bool on2 = 0;
 unsigned long onTime2;
 unsigned long offTime2;
 NewPing sonar2(PIN_TRIGGER2, PIN_ECHO2);
@@ -196,7 +196,7 @@ void loop() {
 
   }
 
-  digitalWrite(PIN_RELAY, on || on2 ? RELAY_ON : !RELAY_ON);
+  digitalWrite(PIN_RELAY, (on || on2) ? RELAY_ON : !RELAY_ON);
 
 #if DEBUG
   Serial.println();
