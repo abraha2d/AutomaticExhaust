@@ -45,6 +45,16 @@ void setup() {
   pinMode(PIN_RELAY, OUTPUT);
   digitalWrite(PIN_RELAY, on ? RELAY_ON : !RELAY_ON);
 
+#if DEBUG
+  Serial.println(" -------------------------- ");
+  Serial.println("| AutomaticExhaust v1.0    |");
+  Serial.println("| written by Kevin Abraham |");
+  Serial.println(" -------------------------- ");
+  Serial.println();
+  Serial.println("Source available at https://github.com/abraha2d/AutomaticExhaust");
+  Serial.println();
+#endif
+
   wdt_enable(WDTO_2S);
 
   for (int i = 0; i < 4; i++) {
