@@ -24,13 +24,13 @@
 #define DELAY_REFRESH 250 // Delay between sensor scans (in milliseconds, min 29)
 #define NUM_READINGS  5   // Number of readings to average per scan
 
-bool on = false;          // Current state of exhaust
+bool on = !RELAY_ON;      // Current state of exhaust (start with off)
 unsigned long onTime;     // On delay start time
 unsigned long offTime;    // Off delay start time
 NewPing sonar(PIN_TRIGGER, PIN_ECHO);
 
 #if SENSOR2
-bool on2 = false;
+bool on2 = !RELAY_ON;
 unsigned long onTime2;
 unsigned long offTime2;
 NewPing sonar2(PIN_TRIGGER2, PIN_ECHO2);
@@ -38,12 +38,14 @@ NewPing sonar2(PIN_TRIGGER2, PIN_ECHO2);
 
 void setup() {
 
+  // Turn off relay as soon as possible (for active-low)
+  // This won't (shouldn't) make a difference for active-high relays
+  pinMode(PIN_RELAY, OUTPUT);
+  digitalWrite(PIN_RELAY, on ? RELAY_ON : !RELAY_ON);
+
 #if DEBUG
   Serial.begin(9600);
 #endif
-
-  pinMode(PIN_RELAY, OUTPUT);
-  digitalWrite(PIN_RELAY, on ? RELAY_ON : !RELAY_ON);
 
 #if DEBUG
   Serial.println(" -------------------------- ");
